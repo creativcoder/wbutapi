@@ -28,7 +28,7 @@ headers = {
 def main():
     
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
-    roll_no = int(raw_input("Enter the roll no : "))
+    roll_no = int(raw_input("Enter the roll no (11 digits) : "))
     semester = int(raw_input("Enter Semester : "))
     result_type = '/show-result_odd.php' if(datetime.now().month<=6) else '/show-result_even.php'
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
