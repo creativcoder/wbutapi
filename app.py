@@ -32,3 +32,6 @@ def main():
 
     print(candidate)
     print(SGPA)
+
+if __name__=='__main__':
+    main()
