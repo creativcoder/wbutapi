@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# encoding: utf-8
+#
+# Author : Rahul Sharma
+#
+
 import requests
 from lxml import html
 from datetime import datetime
