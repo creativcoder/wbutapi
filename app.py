@@ -2,6 +2,9 @@ import requests
 from lxml import html
 from datetime import datetime
 
+BASE_URL = "http://wbutech.net"
+result_type = None
+
 headers = {
         'Origin': 'http://wbutech.net',
         'Accept-Encoding': 'gzip, deflate',
@@ -17,8 +20,7 @@ headers = {
     }
 
 def main():
-    BASE_URL = "http://wbutech.net"
-    result_type = None
+    
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
     roll_no = int(raw_input("Enter the roll no : "))
     semester = int(raw_input("Enter Semester : "))
