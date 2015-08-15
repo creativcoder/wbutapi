@@ -15,3 +15,20 @@ headers = {
         'Connection': 'keep-alive',
         'DNT': '1',
     }
+
+def main():
+    BASE_URL = "http://wbutech.net"
+    result_type = None
+    print(" A FASTER WAY TO GET WBUT RESULTS :D ")
+    roll_no = int(raw_input("Enter the roll no : "))
+    semester = int(raw_input("Enter Semester : "))
+    result_type = '/show-result_odd.php' if(datetime.now().month<=6) else '/show-result_even.php'
+    data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
+    resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
+    #soup = bs(resource.content,'html.parser')
+    tree = html.fromstring(resource.content)
+    candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
+    SGPA = tree.xpath('//*[@id="lblContent"]/table[3]/tbody/tr[2]/td/text()')
+
+    print(candidate)
+    print(SGPA)
