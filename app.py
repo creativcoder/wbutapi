@@ -7,7 +7,7 @@
 import requests
 from lxml import html
 from datetime import datetime
-
+import re
 
 BASE_URL = "http://wbutech.net"
 ODD_SEM = '/show-result_odd.php'
@@ -29,6 +29,22 @@ headers = {
         'DNT': '1',
     }
 
+# result_table = {
+#     'exam_info': tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')[0],
+#     'candidate': tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')[0]
+# }
+
+def print_result():
+    #print(result_table['exam_info'])
+    #print(result_table['candidate'])
+    print("""
+        -------------------------------------------------------------------------------------
+        Sub_code |      Subject offered     | Grade |  Points  |  Credit   | Credit Points  | 
+        -------------------------------------------------------------------------------------
+                 |                          |       |          |           |                |
+        """)
+
+
 def main():
     
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
@@ -38,11 +54,15 @@ def main():
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
     resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
     tree = html.fromstring(resource.content)
+    exam_detail = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
     candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
+
     SGPA = tree.xpath('//*[@id="lblContent"]/table[3]/tbody/tr[2]/td/text()')
 
-    print(candidate)
-    print(SGPA)
+    print(exam_detail[0])
+    print(candidate[0])
+    print('SGPA: ',SGPA[-1])
+    print_result()
 
 if __name__=='__main__':
     main()
