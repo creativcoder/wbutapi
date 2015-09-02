@@ -8,7 +8,11 @@ import requests
 from lxml import html
 from datetime import datetime
 
+
 BASE_URL = "http://wbutech.net"
+ODD_SEM = '/show-result_odd.php'
+EVEN_SEM = '/show-result_even.php'
+
 result_type = None
 
 headers = {
@@ -30,10 +34,9 @@ def main():
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
     roll_no = int(raw_input("Enter the roll no (11 digits) : "))
     semester = int(raw_input("Enter Semester : "))
-    result_type = '/show-result_odd.php' if(datetime.now().month<=6) else '/show-result_even.php'
+    result_type = ODD_SEM if(datetime.now().month<=6) else EVEN_SEM
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
     resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
-    #soup = bs(resource.content,'html.parser')
     tree = html.fromstring(resource.content)
     candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
     SGPA = tree.xpath('//*[@id="lblContent"]/table[3]/tbody/tr[2]/td/text()')
