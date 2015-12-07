@@ -7,7 +7,6 @@
 import requests
 from lxml import html
 from datetime import datetime
-import re
 
 BASE_URL = "http://wbutech.net"
 ODD_SEM = '/show-result_odd.php'
@@ -34,9 +33,9 @@ headers = {
 #     'candidate': tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')[0]
 # }
 
+
+# TODO
 def print_result():
-    #print(result_table['exam_info'])
-    #print(result_table['candidate'])
     print("""
         -------------------------------------------------------------------------------------
         Sub_code |      Subject offered     | Grade |  Points  |  Credit   | Credit Points  | 
@@ -45,7 +44,7 @@ def print_result():
         """)
 
 
-def main():
+def fetch():
     
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
     roll_no = int(raw_input("Enter the roll no (11 digits) : "))
@@ -61,8 +60,9 @@ def main():
 
     print(exam_detail[0])
     print(candidate[0])
-    print('SGPA: ',SGPA[-1])
-    print_result()
+    print("")
+    print(SGPA[-1])
+    # print_result()
 
 if __name__=='__main__':
-    main()
+    fetch()
