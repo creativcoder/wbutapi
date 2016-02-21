@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-#
 # Author : Rahul Sharma
-#
 
 import requests
 from lxml import html
@@ -28,20 +26,33 @@ headers = {
         'DNT': '1',
     }
 
-# result_table = {
-#     'exam_info': tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')[0],
-#     'candidate': tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')[0]
-# }
-
-
-# TODO
-def print_result():
+def show_grade_card(exam_info,candidate_name,candidate_roll,reg_detail,grade_table,summary):
     print("""
-        -------------------------------------------------------------------------------------
-        Sub_code |      Subject offered     | Grade |  Points  |  Credit   | Credit Points  | 
-        -------------------------------------------------------------------------------------
-                 |                          |       |          |           |                |
-        """)
+-------------------------------------------------------------------------------------
+{0} 
+-------------------------------------------------------------------------------------
+{1}                                {2}
+-------------------------------------------------------------------------------------
+{3}
+-------------------------------------------------------------------------------------
+    |                  |       |          |           |                |
+        """.format(exam_info,candidate_name,candidate_roll,reg_detail))
+
+    # Todo : better formatting for result
+    for k,i in enumerate(grade_table[0]):
+        for j in i:
+            print j.text_content(),
+            
+        print("")
+
+    print("---------------------------------------------------------------------------------")
+
+    for k,i in enumerate(summary[0]):
+        for j in i:
+            print j.text_content(),
+
+        print("")
+        
 
 
 def fetch():
@@ -49,20 +60,28 @@ def fetch():
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
     roll_no = int(raw_input("Enter the roll no (11 digits) : "))
     semester = int(raw_input("Enter Semester : "))
-    result_type = ODD_SEM if(datetime.now().month<=6) else EVEN_SEM
+    result_type = ODD_SEM if(semester%2 is not 0) else EVEN_SEM
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
     resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
     tree = html.fromstring(resource.content)
-    exam_detail = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
-    candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
+    # exam_detail = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
+    # candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
+    for_exam = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
+    candidate_name = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
+    candidate_roll = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[2]/text()')
+    reg_detail = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[3]/th/text()')
+    grade_table = tree.xpath('//*[@id="lblContent"]/table[2]/tbody')
+    summary = tree.xpath('//*[@id="lblContent"]/table[3]/tbody')
 
-    SGPA = tree.xpath('//*[@id="lblContent"]/table[3]/tbody/tr[2]/td/text()')
+    show_grade_card(
+        for_exam[0].strip(),
+        candidate_name[0].strip(),
+        candidate_roll[0].strip(),
+        reg_detail[0].strip(),
+        grade_table,
+        summary
 
-    print(exam_detail[0])
-    print(candidate[0])
-    print("")
-    print(SGPA[-1])
-    # print_result()
+        )
 
 if __name__=='__main__':
     fetch()
