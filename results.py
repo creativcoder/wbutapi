@@ -27,7 +27,7 @@ headers = {
     }
 
 def show_grade_card(exam_info,candidate_name,candidate_roll,reg_detail,grade_table,summary):
-    print("""
+    pretty_printed = """
 -------------------------------------------------------------------------------------
 {0} 
 -------------------------------------------------------------------------------------
@@ -36,7 +36,8 @@ def show_grade_card(exam_info,candidate_name,candidate_roll,reg_detail,grade_tab
 {3}
 -------------------------------------------------------------------------------------
     |                  |       |          |           |                |
-        """.format(exam_info,candidate_name,candidate_roll,reg_detail))
+        """.format(exam_info,candidate_name,candidate_roll,reg_detail)
+    print(pretty_printed)
 
     # Todo : better formatting for result
     for k,i in enumerate(grade_table[0]):
@@ -52,14 +53,20 @@ def show_grade_card(exam_info,candidate_name,candidate_roll,reg_detail,grade_tab
             print j.text_content(),
 
         print("")
+
+    return pretty_printed
         
 
 
-def fetch():
+def fetch(sem=None,roll=None):
     
     print(" A FASTER WAY TO GET WBUT RESULTS :D ")
-    roll_no = int(raw_input("Enter the roll no (11 digits) : "))
-    semester = int(raw_input("Enter Semester : "))
+    if sem is None and roll is None:
+        roll_no = int(raw_input("Enter the roll no (11 digits) : "))
+        semester = int(raw_input("Enter Semester : "))
+    else:
+        roll_no = roll
+        semester = sem
     result_type = ODD_SEM if(semester%2 is not 0) else EVEN_SEM
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
     resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
@@ -73,14 +80,13 @@ def fetch():
     grade_table = tree.xpath('//*[@id="lblContent"]/table[2]/tbody')
     summary = tree.xpath('//*[@id="lblContent"]/table[3]/tbody')
 
-    show_grade_card(
+    return show_grade_card(
         for_exam[0].strip(),
         candidate_name[0].strip(),
         candidate_roll[0].strip(),
         reg_detail[0].strip(),
         grade_table,
         summary
-
         )
 
 if __name__=='__main__':
