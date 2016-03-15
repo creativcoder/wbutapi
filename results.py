@@ -2,6 +2,7 @@
 # encoding: utf-8
 # Author : Rahul Sharma
 
+import subprocess
 import requests
 from lxml import html
 from datetime import datetime
@@ -56,7 +57,9 @@ def show_grade_card(exam_info,candidate_name,candidate_roll,reg_detail,grade_tab
 
     return pretty_printed
         
-
+def sendmessage(msg):
+    subprocess.Popen(['notify-send',msg])
+    return
 
 def fetch(sem=None,roll=None):
     
@@ -71,8 +74,6 @@ def fetch(sem=None,roll=None):
     data = 'semno={0}&rectype=1&rollno={1}'.format(semester,roll_no)
     resource = requests.post(BASE_URL+result_type, headers=headers, data=data)
     tree = html.fromstring(resource.content)
-    # exam_detail = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
-    # candidate = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
     for_exam = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[1]/th/text()')
     candidate_name = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[1]/text()')
     candidate_roll = tree.xpath('//*[@id="lblContent"]/table[1]/tbody/tr[2]/th[2]/text()')
